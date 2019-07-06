@@ -8,16 +8,72 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
     </head>
     <body>
-        <h1>Psychic Game</h1>
-        <h2>Guess what letter I'm thinking of</h2>
-        <p>Wins: <span id = "numWins"></span></p>
-        <p>Loses: <span id = "numLosses"></span></p>
-        <p>Guesses left: <span id = "numGuesses"></span></p>
-        <p>Your guesses so far: <span id = "playersGuess"></span></p>
-<!-- javascript -->
-        <script src="game.js"></script>
-    </body>
+		<h1>Guess what letter I'm thinking of</h1>
+		<p id="wins">Wins: </p>
+		<p id="losses">Losses: </p>
+		<p id="guessesLeft">Guesses Left: </p>
+		<p id="guessesSoFar">Your Guesses So Far:</p>
+<!--  <script src="game.js"></script> **LINKED FILE DID NOT WORK** :( --> 
+		<script>
+//parameters and return values
+		var wins = document.getElementById("wins");
+		var losses = document.getElementById("losses");
+		var guessesLeft = document.getElementById("guessesLeft");
+		var guessesSoFar = document.getElementById("guessesSoFar");
+//https://stackoverflow.com/questions/24597634/how-to-generate-an-array-of-alphabet-in-jquery
+		var allLetters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+//setup
+		var winsCount = 0;
+		var lossesCount = 0;
+		var defaultGuessesLeft = 10;
+		var guessesLeftCount = defaultGuessesLeft;
+		var guessesArray = [];
+// Math.random to generate a random letter
+		var getRandomLetter = function () {
+			randomLetter = allLetters[Math.floor(Math.random()*allLetters.length)]
+			console.log(randomLetter);
+			return randomLetter
+		}
+//display game statistics	
+		var displayStats = function () {
+			wins.innerHTML = "Wins: " + winsCount
+			losses.innerHTML = "Losses: " + lossesCount
+			guessesLeft.innerHTML = "Guesses Left: " + guessesLeftCount
+			guessesSoFar.innerHTML = "Your Guesses So Far: " + guessesArray
+		}
+//game reset
+		var resetGame = function () {
+			guessesArray = [];
+			guessesLeftCount = defaultGuessesLeft;
+			currentLetter = getRandomLetter();
+		}
+		var userWon = function (userLetter) {
+			return userLetter === currentLetter 
+		}
+		var userLost = function () {
+			return guessesLeftCount === 0;
+		}
+//user's keyboard input and display
+		var currentLetter = getRandomLetter();
+			displayStats();
+			document.onkeydown = function (event) {
+			var userLetter = event.key;
+			guessesLeftCount--
+			guessesArray.push(userLetter)
+			if (userWon(userLetter)) {
+				winsCount++;
+				resetGame();
+		} 
+			if (userLost()) {
+				lossesCount++;
+				resetGame();
+		}
+			displayStats();
+		}
+		</script>
+	</body>
 </html>
+
 <!-- You're going to make a game just like the one in the video. 
 Essentially, the app randomly picks a letter, and the user has to guess 
 which letter the app chose. Put the following text on your page:
